@@ -18,6 +18,7 @@ app = FastAPI()
 
 @app.post("/")
 def upload(files: List[UploadFile] = File(...)):
+  #create's variable for each half of the file
   for file in files:
     split_name=(file.filename).split("_")
     try:
@@ -29,15 +30,19 @@ def upload(files: List[UploadFile] = File(...)):
       return {"message": "There was an error uploading the file(s)"}
     finally:
       file.file.close()
+  #create variable that containes the full leangth of the file
   full_file = contents_first_half + contents_second_half
+  #enctypt the data of the file with sha512 and a random iv
   h = hashlib.sha512()
   h.update(full_file)
   hash_file = h.hexdigest()
   iv = get_random_bytes(16)
   cipher = AES.new('This is a key123'.encode("utf8"), AES.MODE_CFB, iv)
   ciphertext = cipher.encrypt(hash_file.encode("utf8"))
+  #adds the iv and the encrypted hash to the ens of the file
   end_file = iv + ciphertext
   full_file_hash = full_file + end_file
+  #writes the content of the file with the signeture to a local file
   with open(f'/home/roeihafifot/uploaded_photos/{split_name[0]}.jpg', 'wb') as f:
     f.write(full_file_hash)
   
