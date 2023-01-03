@@ -1,6 +1,7 @@
 import uvicorn
 import ast
 import hashlib
+import logging
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from fastapi import FastAPI, File, UploadFile, Query
@@ -8,6 +9,17 @@ from typing import List
 from fastapi.responses import FileResponse
 
 app = FastAPI()
+
+#create a new handler and connect the logger to logs.txt
+logger = logging.getLogger('elastic')
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+handler = logging.FileHandler('/home/roeihafifot/logs.txt')
+logger.addHandler(handler)
 
 #def encrypt(file_content):
 #    iv = get_random_bytes(16)
@@ -20,6 +32,7 @@ app = FastAPI()
 def upload(files: List[UploadFile] = File(...)):
   #create's variable for each half of the file
   for file in files:
+    logger.info(f'success - uploaded file to FastApi server: {file.filename}')
     split_name=(file.filename).split("_")
     try:
       if "a" in split_name[1]:
@@ -45,6 +58,7 @@ def upload(files: List[UploadFile] = File(...)):
   #writes the content of the file with the signeture to a local file
   with open(f'/home/roeihafifot/uploaded_photos/{split_name[0]}.jpg', 'wb') as f:
     f.write(full_file_hash)
+  logger.info(f'success - merged files and created file: {split_name[0]}')
   
 
 if __name__ == "__main__":
