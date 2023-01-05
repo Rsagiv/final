@@ -32,7 +32,7 @@ logger.addHandler(handler)
 def upload(files: List[UploadFile] = File(...)):
   #create's variable for each half of the file
   for file in files:
-    logger.info(f'success - uploaded file to FastApi server: {file.filename}')
+    logger.info(f'success upload - uploaded file to FastApi server: {file.filename}')
     split_name=(file.filename).split("_")
     try:
       if "a" in split_name[1]:
@@ -41,6 +41,7 @@ def upload(files: List[UploadFile] = File(...)):
         contents_second_half = file.file.read()
     except Exception:
       return {"message": "There was an error uploading the file(s)"}
+      logger.info(f'error upload - There was an error uploading: {file.filename}')
     finally:
       file.file.close()
   #create variable that containes the full leangth of the file
@@ -56,10 +57,12 @@ def upload(files: List[UploadFile] = File(...)):
   end_file = iv + ciphertext
   full_file_hash = full_file + end_file
   #writes the content of the file with the signeture to a local file
-  with open(f'/home/roeihafifot/uploaded_photos/{split_name[0]}.jpg', 'wb') as f:
-    f.write(full_file_hash)
-  logger.info(f'success - merged files and created file: {split_name[0]}')
-  
+  try:
+    with open(f'/home/roeihafifot/uploaded_photos/{split_name[0]}.jpg', 'wb') as f:
+      f.write(full_file_hash)
+    logger.info(f'success merge - merged files and created file: {split_name[0]}')
+  except:
+    logger.info(f'error merge - There was an error merging and creating file: {split_name[0]}') 
 
 if __name__ == "__main__":
   uvicorn.run(app, host="0.0.0.0", port=8080)

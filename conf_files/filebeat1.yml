@@ -6,12 +6,13 @@ filebeat.inputs:
   enabled: true
   paths:
     - /home/roeihafifot/logs.txt
-  include_lines: ['^success']
-  
+  include_lines: ['^error']
+
+
 # ======================= Elasticsearch template setting =======================
 
-setup.template.name: "fastapi_success-template"
-setup.template.pattern: "fastapi_success-*"
+setup.template.name: "fastapi_error-template"
+setup.template.pattern: "fastapi_error-*"
 
 
 setup.template.settings:
@@ -22,7 +23,7 @@ setup.template.settings:
 output.elasticsearch:
   # Array of hosts to connect to.
   hosts: ["20.86.28.57:9200"]
-  index: "fastapi_success-%{+yyyy.MM.dd}"
+  index: "fastapi_error-%{+yyyy.MM.dd}"
   # Protocol - either `http` (default) or `https`.
   protocol: "https"
 
@@ -40,9 +41,7 @@ processors:
   - add_cloud_metadata: ~
   - add_docker_metadata: ~
   - add_kubernetes_metadata: ~
-  - drop_fields:
-      fields: ["log.file.path", "host.os.name.text", "host.mac", "host.ip", "cloud.instance.id", "agent.type", "host.os.version", "host.os.kernel", "host.os.name", "agent.name", "host.name", "host.id", "host.os.type", "cloud.region", "host.os.codename", "input.type", "log.offset", "agent.hostname", "host.architecture", "cloud.provider", "cloud.machine.type", "agent.id", "cloud.service.name", "ecs.version", "host.containerized", "host.os.platform", "agent.ephemeral_id", "agent.version", "host.os.family", "cloud.instance.name"]
-      ignore_missing: true
+  
 # ============================== Filebeat modules ==============================
 
 filebeat.config.modules:
