@@ -1,0 +1,12 @@
+[Unit]
+Description=Filebeat instance2
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/share/filebeat/bin/filebeat -c /etc/filebeat/filebeat1.yml
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
