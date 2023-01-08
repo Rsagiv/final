@@ -1,0 +1,5 @@
+{
+    "HaProxyUrl": "http://20.224.50.228:8080",
+    "LoggerName": "elastic",
+    "LogFile": "/home/roeihafifot/logs.txt"
+}

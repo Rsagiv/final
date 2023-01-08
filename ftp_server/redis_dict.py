@@ -3,27 +3,32 @@ import time
 import redis
 import requests
 import logging
+import json
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
   
+
+with open("config.json") as jsonfile:
+    configfile = json.load(jsonfile)
+
 
 #define redis on local host, on port 6379
 r=redis.StrictRedis(host='localhost', port=6379)
 
 
-#define the IP of the HAProxy
-url = 'http://20.224.50.228:8080'
+#define the IP of the HAProxy"
+url = configfile["HaProxyUrl"]
 
 
 #create a new handler and connect the logger to logs.txt file
-logger = logging.getLogger('elastic')
+logger = logging.getLogger(configfile["LoggerName"])
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
 logger.addHandler(ch)
-handler = logging.FileHandler('/home/roeihafifot/logs.txt')
+handler = logging.FileHandler(configfile["LogFile"])
 logger.addHandler(handler)
   
   
