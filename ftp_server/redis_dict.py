@@ -41,8 +41,9 @@ class OnMyWatch:
         #checking for changes every 5 seconds
             while True:
                 time.sleep(5)
-        except:
+        except Exception as error:
             self.observer.stop()
+            logger.info(f'observer stopped because of: {error} error')
             print("Observer Stopped")
   
         self.observer.join()
