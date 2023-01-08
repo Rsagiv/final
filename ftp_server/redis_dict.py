@@ -10,10 +10,12 @@ from watchdog.events import FileSystemEventHandler
 #define redis on local host, on port 6379
 r=redis.StrictRedis(host='localhost', port=6379)
 
+
 #define the IP of the HAProxy
 url = 'http://20.224.50.228:8080'
 
-#create a new handler and connect the logger to logs.txt
+
+#create a new handler and connect the logger to logs.txt file
 logger = logging.getLogger('elastic')
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
@@ -24,10 +26,10 @@ logger.addHandler(ch)
 handler = logging.FileHandler('/home/roeihafifot/logs.txt')
 logger.addHandler(handler)
   
+  
 class OnMyWatch:
     # Set the directory on watch
     watchDirectory = "/ftphome/tranfer_files"
-  
     def __init__(self):
         self.observer = Observer()
   
@@ -36,6 +38,7 @@ class OnMyWatch:
         self.observer.schedule(event_handler, self.watchDirectory, recursive = True)
         self.observer.start()
         try:
+        #checking for changes every 5 seconds
             while True:
                 time.sleep(5)
         except:
@@ -50,8 +53,7 @@ class Handler(FileSystemEventHandler):
     def on_any_event(event):
         if event.is_directory:
             return None
-        
-        #action's when Event is created:
+        #action's when Event(FIle) is created:
         elif event.event_type == 'created':
             #create variable with the name of the file
             file_name=event.src_path.replace("/ftphome/tranfer_files/", '')
