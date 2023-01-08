@@ -1,0 +1,13 @@
+[Unit]
+After=network.target
+StartLimitIntervalSec=0
+Description=Python for defining redis and sending to HAProxy
+[Service]
+ExecStart=/usr/bin/python3 /home/roeihafifot/main.py
+Restart=always
+RestartSec=1
+User=roeihafifot
+[Install]
+WantedBy=multi-user.target
+
+
