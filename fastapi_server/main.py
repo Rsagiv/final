@@ -30,7 +30,7 @@ logger.addHandler(handler)
 
 @app.post("/")
 def upload(files: List[UploadFile] = File(...)):
-  #create's variable for each half of the file
+  #create's variable for each half of the file that is sent
   for file in files:
     logger.info(f'success upload - uploaded file to FastApi server: {file.filename}')
     split_name=(file.filename).split("_")
