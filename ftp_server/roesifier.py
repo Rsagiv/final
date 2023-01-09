@@ -7,7 +7,7 @@ import json
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-with open("config.json") as jsonfile:
+with open("/home/roeihafifot/config.json") as jsonfile:
     configfile = json.load(jsonfile)
 
 # define redis on local host, on port 6379
