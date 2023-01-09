@@ -1,6 +1,7 @@
 # import modul's: time, Observer, FileSystemEventHandler,logging, redis, requests
 import time
 import redis
+import multiprocessing
 import requests
 import logging
 import json
@@ -16,11 +17,11 @@ Redis_connection = redis.StrictRedis(host='localhost', port=6379)
 # create a new handler and connect the logger to logs.txt file
 logger = logging.getLogger(configfile["LoggerName"])
 logger.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+createhandler = logging.StreamHandler()
+createhandler.setLevel(logging.DEBUG)
 formatter = logging.Formatter(configfile["LogFormatter"])
-ch.setFormatter(formatter)
-logger.addHandler(ch)
+createhandler.setFormatter(formatter)
+logger.addHandler(createhandler)
 handler = logging.FileHandler(configfile["LogFile"])
 logger.addHandler(handler)
 
