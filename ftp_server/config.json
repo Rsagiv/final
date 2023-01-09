@@ -1,5 +1,7 @@
 {
     "HaProxyUrl": "http://20.224.50.228:8080",
     "LoggerName": "elastic",
-    "LogFile": "/home/roeihafifot/logs.txt"
+    "LogFile": "/home/roeihafifot/logs.txt",
+    "FtpTransferFiles": "/ftphome/tranfer_files",
+    "LogFormatter": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 }

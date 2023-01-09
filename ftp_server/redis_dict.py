@@ -25,7 +25,7 @@ logger = logging.getLogger(configfile["LoggerName"])
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter(configfile["LogFormatter"])
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 handler = logging.FileHandler(configfile["LogFile"])
@@ -34,7 +34,7 @@ logger.addHandler(handler)
   
 class OnMyWatch:
     # Set the directory on watch
-    watchDirectory = "/ftphome/tranfer_files"
+    watchDirectory = configfile["FtpTransferFiles"]
     def __init__(self):
         self.observer = Observer()
   
@@ -62,7 +62,7 @@ class Handler(FileSystemEventHandler):
         #action's when Event(FIle) is created:
         elif event.event_type == 'created':
             #create variable with the name of the file
-            file_name=event.src_path.replace("/ftphome/tranfer_files/", '')
+            file_name=event.src_path.replace(configfile["FtpTransferFiles"], '')
             logger.info(f'success - uploaded file to FTP server: {file_name}')
             #split name by basename and extension
             split_name=file_name.split("_")
