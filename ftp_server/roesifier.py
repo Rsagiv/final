@@ -56,6 +56,7 @@ class OnMyWatch:
         self.observer = Observer()
 
     def run(self):
+        # scans all files in FTP dir and runs the main func before watchdog client
         for file in dir_list:
             create_and_send(file)
         event_handler = Handler()
