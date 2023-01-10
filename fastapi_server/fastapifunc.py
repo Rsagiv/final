@@ -44,19 +44,19 @@ def encrypt(first_half, second_half):
 @app.post("/")
 def upload(files: List[UploadFile] = File(...)):
     # create's variable for each half of the file that is sent
-    for file in files:
-        logger.info(f'success upload - uploaded file to FastApi server: {file.filename}')
-        split_name = (file.filename).split("_")
+    for upload_file in files:
+        logger.info(f'success upload - uploaded file to FastApi server: {upload_file.filename}')
+        split_name = (upload_file.filename).split("_")
         try:
             if "a" == split_name[1].split(".")[0]:
-                contents_first_half = file.file.read()
+                contents_first_half = upload_file.file.read()
             else:
-                contents_second_half = file.file.read()
+                contents_second_half = upload_file.file.read()
         except Exception:
-            logger.info(f'error upload - There was an error uploading: {file.filename}')
+            logger.info(f'error upload - There was an error uploading: {upload_file.filename}')
             return {"message": "There was an error uploading the file(s)"}
         finally:
-            file.file.close()
+            upload_file.file.close()
     # create variable that containes the full leangth of the file
     full_file_hash = encrypt(contents_first_half, contents_second_half)
     # writes the content of the file with the signeture to a local file
@@ -64,7 +64,7 @@ def upload(files: List[UploadFile] = File(...)):
         with open(f'/home/roeihafifot/uploaded_photos/{split_name[0]}.jpg', 'wb') as f:
             f.write(full_file_hash)
         logger.info(f'success merge - merged files and created file: {split_name[0]}')
-    except:
+    except Exception:
         logger.info(f'error merge - There was an error merging and creating file: {split_name[0]}')
 
 
