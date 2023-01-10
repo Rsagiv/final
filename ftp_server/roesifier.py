@@ -1,11 +1,11 @@
 # import modul's: time, Observer, FileSystemEventHandler,logging, redis, requests
 import time
 import redis
-import multiprocessing
 import requests
 import logging
 import json
 import os
+from concurrent.futures import ProcessPoolExecutor
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -89,4 +89,5 @@ class Handler(FileSystemEventHandler):
 
 if __name__ == '__main__':
     watch = OnMyWatch()
-    watch.run()
+    with ProcessPoolExecutor(max_workers=3) as executor:
+        executor.submit(watch.run())
