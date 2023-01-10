@@ -57,10 +57,8 @@ class OnMyWatch:
 
     def run(self):
         # scans all files in FTP dir and runs the main func before watchdog client
-        with multiprocessing.pool as mp_pool:
-            results = mp_pool.imap(create_and_send, dir_list)
-            for file in results:
-                create_and_send(file)
+        for file in dir_list:
+            create_and_send(file)
         event_handler = Handler()
         self.observer.schedule(event_handler, self.watchDirectory, recursive=True)
         self.observer.start()
@@ -86,9 +84,7 @@ class Handler(FileSystemEventHandler):
             # create variable with the name of the file
             file_name = event.src_path.replace(configfile["FtpTransferFiles"], '')
             logger.info(f'success - uploaded file to FTP server: {file_name}')
-            with multiprocessing.pool as mp_pool:
-                results = mp_pool.imap(create_and_send, file_name)
-                create_and_send(results)
+            create_and_send(file_name)
 
 
 if __name__ == '__main__':
