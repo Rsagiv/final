@@ -53,7 +53,13 @@ def append_to_list(file_name, split_name):
 def send_to_fastAPI(files):
     try:
         resp = requests.post(url=configfile["HaProxyUrl"], files=files)
-        if resp == 200:
+        if resp.status_code == 200:
+            logger.info("SUCCESS: sent files to fastAPI")
+        else:
+            logger.info("ERROR: Failed to establish connection")
+    except Exception as error:
+        logger.info(f"ERROR: Failed to establish connection: because {error}")
+
 
 
 
