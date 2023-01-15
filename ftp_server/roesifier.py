@@ -42,11 +42,15 @@ dir_list = os.listdir(configfile["FtpTransferFiles"])
 def create_logger(log_name, log_format, file_location):
     logger = logging.getLogger(log_name)
     logger.setLevel(logging.DEBUG)
+    # create a new handler
     create_handler = logging.StreamHandler()
     create_handler.setLevel(logging.DEBUG)
+    # create the format
     formatter = logging.Formatter(log_format)
     create_handler.setFormatter(formatter)
+    # add the handler to the logger
     logger.addHandler(create_handler)
+    # add a file handler
     handler = logging.FileHandler(file_location)
     logger.addHandler(handler)
     return logger
