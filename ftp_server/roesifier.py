@@ -9,11 +9,6 @@ from concurrent.futures import ProcessPoolExecutor
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-with open("/home/roeihafifot/config.json") as jsonfile:
-    configfile = json.load(jsonfile)
-
-# define redis on local host, on port 6379
-redis_connection = redis.StrictRedis(host='localhost', port=6379)
 
 # define FTP path to scan all files before watchdog client
 dir_list = os.listdir(configfile["FtpTransferFiles"])
@@ -29,8 +24,47 @@ logger.addHandler(createhandler)
 handler = logging.FileHandler(configfile["LogFile"])
 logger.addHandler(handler)
 
+def check_json_connection(json_file_path):
+    try:
+        with open(json_file_path) as jsonfile:
+            json.load(jsonfile)
+        return True
+    except json.decoder.JSONDecodeError:
+        return False
+    except FileNotFoundError:
+        return "no_file"
 
-def check_redis(file_name):
+def import_config_file():
+    json_file_path = "/home/roeihafifot/config.json"
+    if check_json_connection(json_file_path):
+        with open("/home/roeihafifot/config.json") as jsonfile:
+            configfile = json.load(jsonfile)
+            return configfile
+    elif check_json_connection(json_file_path) == "no_file":
+        logger.info("ERROR In finding config file")
+    else:
+        logger.info("ERROR Connection to JSON file failed")
+def check_redis_connection(redis_connection):
+    try:
+        # Send a ping command to the Redis server
+        response = redis_connection.ping()
+        # If the server responds with a PONG message, return True
+        if response:
+            return True
+    except redis.ConnectionError:
+        # If an error occurs while trying to connect to the server, return False
+        return False
+
+# define redis on local host, on port 6379
+def redis_function():
+        redis_connection = redis.StrictRedis(host='localhost', port=6379)
+        if check_redis_connection(redis_connection):
+            logger.info("SUCCESS_connection_to_redis: we've got a pong from redis!")
+            return redis_connection
+        else:
+            logger.info("ERROR_connection_to_redis: we do not have a pong from redis!")
+
+def check_key_in_redis(file_name):
     # split name by basename and extension
     split_name = file_name.split("_")
     # if half of file alradey in redis, sends both to HAProxy
@@ -73,7 +107,7 @@ class OnMyWatch:
     def run(self):
         # scans all files in FTP dir and runs the main func before watchdog client
         for file in dir_list:
-            check_redis(file)
+            check_key_in_redis(file)
         event_handler = Handler()
         self.observer.schedule(event_handler, self.watchDirectory, recursive=True)
         self.observer.start()
@@ -98,10 +132,12 @@ class Handler(FileSystemEventHandler):
         # create variable with the name of the file
         file_name = event.src_path.replace(configfile["FtpTransferFiles"], '')
         logger.info(f'success - uploaded file to FTP server: {file_name}')
-        check_redis(file_name)
+        check_key_in_redis(file_name)
 
 
 if __name__ == '__main__':
+    import_config_file()
+    redis_function()
     watch = OnMyWatch()
     with ProcessPoolExecutor(max_workers=3) as executor:
         executor.submit(watch.run())
