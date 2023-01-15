@@ -9,7 +9,6 @@ from concurrent.futures import ProcessPoolExecutor
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-
 # define FTP path to scan all files before watchdog client
 dir_list = os.listdir(configfile["FtpTransferFiles"])
 
@@ -24,6 +23,7 @@ logger.addHandler(createhandler)
 handler = logging.FileHandler(configfile["LogFile"])
 logger.addHandler(handler)
 
+
 def check_json_connection(json_file_path):
     try:
         with open(json_file_path) as jsonfile:
@@ -34,7 +34,9 @@ def check_json_connection(json_file_path):
     except FileNotFoundError:
         return "no_file"
 
+
 def import_config_file():
+    global configfile
     json_file_path = "/home/roeihafifot/config.json"
     if check_json_connection(json_file_path):
         with open("/home/roeihafifot/config.json") as jsonfile:
@@ -44,6 +46,8 @@ def import_config_file():
         logger.info("ERROR In finding config file")
     else:
         logger.info("ERROR Connection to JSON file failed")
+
+
 def check_redis_connection(redis_connection):
     try:
         # Send a ping command to the Redis server
@@ -55,14 +59,17 @@ def check_redis_connection(redis_connection):
         # If an error occurs while trying to connect to the server, return False
         return False
 
+
 # define redis on local host, on port 6379
 def redis_function():
-        redis_connection = redis.StrictRedis(host='localhost', port=6379)
-        if check_redis_connection(redis_connection):
-            logger.info("SUCCESS_connection_to_redis: we've got a pong from redis!")
-            return redis_connection
-        else:
-            logger.info("ERROR_connection_to_redis: we do not have a pong from redis!")
+    global redis_connection
+    redis_connection = redis.StrictRedis(host='localhost', port=6379)
+    if check_redis_connection(redis_connection):
+        logger.info("SUCCESS_connection_to_redis: we've got a pong from redis!")
+        return redis_connection
+    else:
+        logger.info("ERROR_connection_to_redis: we do not have a pong from redis!")
+
 
 def check_key_in_redis(file_name):
     # split name by basename and extension
@@ -93,8 +100,6 @@ def send_to_fastAPI(files):
             logger.info("ERROR: Failed to establish connection")
     except Exception as error:
         logger.info(f"ERROR: Failed to establish connection: because {error}")
-
-
 
 
 class OnMyWatch:
