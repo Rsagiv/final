@@ -9,20 +9,6 @@ from concurrent.futures import ProcessPoolExecutor
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-# define FTP path to scan all files before watchdog client
-dir_list = os.listdir(configfile["FtpTransferFiles"])
-
-# create a new handler and connect the logger to logs.txt file
-logger = logging.getLogger(configfile["LoggerName"])
-logger.setLevel(logging.DEBUG)
-createhandler = logging.StreamHandler()
-createhandler.setLevel(logging.DEBUG)
-formatter = logging.Formatter(configfile["LogFormatter"])
-createhandler.setFormatter(formatter)
-logger.addHandler(createhandler)
-handler = logging.FileHandler(configfile["LogFile"])
-logger.addHandler(handler)
-
 
 def check_json_connection(json_file_path):
     try:
@@ -36,7 +22,6 @@ def check_json_connection(json_file_path):
 
 
 def import_config_file():
-    global configfile
     json_file_path = "/home/roeihafifot/config.json"
     if check_json_connection(json_file_path):
         with open("/home/roeihafifot/config.json") as jsonfile:
@@ -46,6 +31,23 @@ def import_config_file():
         logger.info("ERROR In finding config file")
     else:
         logger.info("ERROR Connection to JSON file failed")
+
+
+configfile = import_config_file()
+
+# define FTP path to scan all files before watchdog client
+dir_list = os.listdir(configfile["FtpTransferFiles"])
+
+# create a new handler and connect the logger to logs.txt file
+logger = logging.getLogger(configfile["LoggerName"])
+logger.setLevel(logging.DEBUG)
+createhandler = logging.StreamHandler()
+createhandler.setLevel(logging.DEBUG)
+formatter = logging.Formatter(configfile["LogFormatter"])
+createhandler.setFormatter(formatter)
+logger.addHandler(createhandler)
+handler = logging.FileHandler(configfile["LogFile"])
+logger.addHandler(handler)
 
 
 def check_redis_connection(redis_connection):
@@ -62,13 +64,15 @@ def check_redis_connection(redis_connection):
 
 # define redis on local host, on port 6379
 def redis_function():
-    global redis_connection
     redis_connection = redis.StrictRedis(host='localhost', port=6379)
     if check_redis_connection(redis_connection):
         logger.info("SUCCESS_connection_to_redis: we've got a pong from redis!")
         return redis_connection
     else:
         logger.info("ERROR_connection_to_redis: we do not have a pong from redis!")
+
+
+redis_connection = redis_function()
 
 
 def check_key_in_redis(file_name):
@@ -141,8 +145,6 @@ class Handler(FileSystemEventHandler):
 
 
 if __name__ == '__main__':
-    import_config_file()
-    redis_function()
     watch = OnMyWatch()
     with ProcessPoolExecutor(max_workers=3) as executor:
         executor.submit(watch.run())
