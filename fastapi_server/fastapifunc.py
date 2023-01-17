@@ -14,16 +14,26 @@ app = FastAPI()
 with open("/home/roeihafifot/config.json") as jsonfile:
     configfile = json.load(jsonfile)
 
-# create a new handler and connect the logger to logs.txt
-logger = logging.getLogger(configfile["LoggerName"])
-logger.setLevel(logging.DEBUG)
-createhandler = logging.StreamHandler()
-createhandler.setLevel(logging.DEBUG)
-formatter = logging.Formatter(configfile["LogFormatter"])
-createhandler.setFormatter(formatter)
-logger.addHandler(createhandler)
-handler = logging.FileHandler(configfile["LogFile"])
-logger.addHandler(handler)
+def create_logger(log_name, log_format, file_location):
+    logger = logging.getLogger(log_name)
+    logger.setLevel(logging.DEBUG)
+    # create a new handler
+    create_handler = logging.StreamHandler()
+    create_handler.setLevel(logging.DEBUG)
+    # create the format
+    formatter = logging.Formatter(log_format)
+    create_handler.setFormatter(formatter)
+    # add the handler to the logger
+    logger.addHandler(create_handler)
+    # add a file handler
+    handler = logging.FileHandler(file_location)
+    logger.addHandler(handler)
+    return logger
+
+
+# create a new handler and connect the logger to logs.txt file
+logger = create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
+
 
 
 def encrypt(first_half, second_half):

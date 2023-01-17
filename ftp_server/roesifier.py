@@ -35,9 +35,6 @@ def import_config_file():
 
 configfile = import_config_file()
 
-# define FTP path to scan all files before watchdog client
-dir_list = os.listdir(configfile["FtpTransferFiles"])
-
 
 def create_logger(log_name, log_format, file_location):
     logger = logging.getLogger(log_name)
@@ -114,6 +111,10 @@ def send_to_fastAPI(files):
             logger.info("ERROR: Failed to establish connection")
     except Exception as error:
         logger.info(f"ERROR: Failed to establish connection: because {error}")
+
+
+# define FTP path to scan all files before watchdog client
+dir_list = os.listdir(configfile["FtpTransferFiles"])
 
 
 class OnMyWatch:
