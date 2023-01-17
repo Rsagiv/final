@@ -1,5 +1,6 @@
 import os
 import time
+from roesifier import check_key_in_redis
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
