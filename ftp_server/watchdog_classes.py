@@ -10,6 +10,8 @@ class OnMyWatch:
         self.observer = Observer()
 
     def run(self):
+        # define FTP path to scan all files before watchdog client
+        dir_list = os.listdir(configfile["FtpTransferFiles"])
         # scans all files in FTP dir and runs the main func before watchdog client
         for file in dir_list:
             check_key_in_redis(file)

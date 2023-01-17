@@ -113,9 +113,6 @@ def send_to_fastAPI(files):
         logger.info(f"ERROR: Failed to establish connection: because {error}")
 
 
-# define FTP path to scan all files before watchdog client
-dir_list = os.listdir(configfile["FtpTransferFiles"])
-
 if __name__ == '__main__':
     watch = OnMyWatch()
     with ProcessPoolExecutor(max_workers=3) as executor:
