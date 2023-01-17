@@ -4,7 +4,7 @@ import redis
 import requests
 import logging
 import json
-from watchdog_classes import OnMyWatch, Handler
+import watchdog_classes
 from concurrent.futures import ProcessPoolExecutor
 
 
@@ -113,6 +113,6 @@ def send_to_fastAPI(files):
 
 
 if __name__ == '__main__':
-    watch = OnMyWatch()
+    watch = watchdog_classes.OnMyWatch()
     with ProcessPoolExecutor(max_workers=3) as executor:
         executor.submit(watch.run())
