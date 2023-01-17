@@ -1,6 +1,10 @@
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+
 class OnMyWatch:
     # Set the directory on watch
-    watchDirectory = configfile["FtpTransferFiles"]
+    watchDirectory = "/ftphome/tranfer_files"
 
     def __init__(self):
         self.observer = Observer()
@@ -18,8 +22,6 @@ class OnMyWatch:
                 time.sleep(5)
         except Exception as error:
             self.observer.stop()
-            logger.info(f'observer stopped because of: {error} error')
-            print("Observer Stopped")
 
         self.observer.join()
 
@@ -31,6 +33,5 @@ class Handler(FileSystemEventHandler):
         if event.is_directory:
             return None
         # create variable with the name of the file
-        file_name = event.src_path.replace(configfile["FtpTransferFiles"], '')
-        logger.info(f'success - uploaded file to FTP server: {file_name}')
+        file_name = event.src_path.replace("/ftphome/tranfer_files", '')
         check_key_in_redis(file_name)
