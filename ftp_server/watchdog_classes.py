@@ -1,6 +1,3 @@
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-
 class OnMyWatch:
     # Set the directory on watch
     watchDirectory = configfile["FtpTransferFiles"]
