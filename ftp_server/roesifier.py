@@ -4,7 +4,6 @@ import redis
 import requests
 import logging
 import json
-import os
 from watchdog_classes import OnMyWatch, Handler
 from concurrent.futures import ProcessPoolExecutor
 
