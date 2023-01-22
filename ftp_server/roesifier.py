@@ -4,8 +4,6 @@ import redis
 import requests
 import logging
 import json
-import watchdog_classes
-from concurrent.futures import ProcessPoolExecutor
 
 
 def check_json_connection(json_file_path):
@@ -111,8 +109,3 @@ def send_to_fastAPI(files):
     except Exception as error:
         logger.info(f"ERROR: Failed to establish connection: because {error}")
 
-
-if __name__ == '__main__':
-    watch = watchdog_classes.OnMyWatch()
-    with ProcessPoolExecutor(max_workers=3) as executor:
-        executor.submit(watch.run())
