@@ -5,21 +5,16 @@ import redis
 
 class TestRoesifier(unittest.TestCase):
 
-    def __init__(self, methodName: str = ...):
-        super().__init__(methodName)
-        self.redis_connection = None
-
-    @classmethod
-    def setUpClass(cls):
-        redis_connection = redis.StrictRedis(host='localhost', port=6379)
-        return redis_connection
-
     def setUp(self):
         return True
 
+    @classmethod
+    def setUpClass(cls):
+        print('setupClass')
+
     def test_redis_connection(self):
-        self.setUpClass()
-        redis_check = roesifier.check_redis_connection(self.redis_connection)
+        redis_connection = redis.StrictRedis(host='localhost', port=6379)
+        redis_check = roesifier.check_redis_connection(redis_connection)
         self.assertTrue(redis_check)
 
 
