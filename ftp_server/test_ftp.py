@@ -1,6 +1,7 @@
+import roesifier
 import unittest
 import redis
-from roesifier import check_redis_connection
+
 
 
 class TestRoesifier(unittest.TestCase):
@@ -10,7 +11,7 @@ class TestRoesifier(unittest.TestCase):
 
     def test_redis_connection(self):
         redis_connection = redis.StrictRedis(host='localhost', port=6379)
-        redis_check = check_redis_connection(redis_connection)
+        redis_check = roesifier.check_redis_connection(redis_connection)
         self.assertTrue(redis_check)
 
 
