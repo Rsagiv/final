@@ -97,6 +97,7 @@ def append_to_list(file_name, split_name):
     files.append(('files', open(first_half, 'rb')))
     files.append(('files', open(second_half, 'rb')))
     send_to_fastAPI(files)
+    return files
 
 
 def send_to_fastAPI(files):
