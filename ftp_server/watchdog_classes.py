@@ -40,3 +40,8 @@ class Handler(FileSystemEventHandler):
         # create variable with the name of the file
         file_name = event.src_path.replace("/ftphome/tranfer_files", '')
         check_key_in_redis(file_name)
+
+
+if __name__ == '__main__':
+    watch = OnMyWatch()
+    watch.run()
