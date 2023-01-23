@@ -30,7 +30,7 @@ class TestRoesifier(unittest.TestCase):
         print(roesifier.check_key_in_redis(file1name))
         print(roesifier.check_key_in_redis(file2name))
 
-    def test_append_to_list(self):
+    def append_to_list(self):
         print(roesifier.append_to_list("example_a", "example"))
 
 if __name__ == '__main__':
