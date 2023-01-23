@@ -48,7 +48,7 @@ def encrypt(first_half, second_half):
     end_file = iv + ciphertext
     # adds the iv and the encrypted hash to the ens of the file
     full_file_hash = full_file + end_file
-    return full_file_hash
+    return full_file_hash, end_file
 
 
 @app.post("/")
@@ -68,7 +68,7 @@ def upload(files: List[UploadFile] = File(...)):
         finally:
             upload_file.file.close()
     # create variable that containes the full leangth of the file
-    full_file_hash = encrypt(contents_first_half, contents_second_half)
+    full_file_hash = encrypt(contents_first_half, contents_second_half)[0]
     # writes the content of the file with the signeture to a local file
     try:
         with open(f'/home/roeihafifot/uploaded_photos/{split_name[0]}.jpg', 'wb') as f:
