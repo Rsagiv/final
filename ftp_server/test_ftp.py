@@ -11,12 +11,13 @@ class TestRoesifier(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        file_contents = "this is"
-        file_path = "/ftphome/transfer_files/example_a.txt"
-        os.system(f"echo {file_contents} | sudo tee {file_path}")
-        with open('/ftphome/tranfer_files/example_b.txt', "w") as file2:
-            os.system('sudo chmod +x /ftphome/tranfer_files/example_b.txt')
-            file2.write("a test")
+        file1_contents = "this is"
+        file1_path = "/ftphome/transfer_files/example_a.txt"
+        os.system(f"echo {file1_contents} | sudo tee {file1_path}")
+        file2_contents = "a test"
+        file2_path = "/ftphome/transfer_files/example_b.txt"
+        os.system(f"echo {file2_contents} | sudo tee {file2_path}")
+
     def test_redis_connection(self):
         redis_connection = redis.StrictRedis(host='localhost', port=6379)
         redis_check = roesifier.check_redis_connection(redis_connection)
