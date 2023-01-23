@@ -18,10 +18,12 @@ class TestRoesifier(unittest.TestCase):
         self.assertTrue(redis_check)
 
     def test_check_files_append(self):
-        file1 = "example_a.txt"
-        file2 = "example_b.txt"
-        print(roesifier.check_key_in_redis(file1))
-        print(roesifier.check_key_in_redis(file2))
+        file1 = open("/ftphome/tranfer_files/example_a.txt", "w").write("this is")
+        file2 = open("/ftphome/tranfer_files/example_b.txt", "w").write("a test")
+        file1name = "example_a.txt"
+        file2name = "example_b.txt"
+        print(roesifier.check_key_in_redis(file1name))
+        print(roesifier.check_key_in_redis(file2name))
 
 
 if __name__ == '__main__':
