@@ -85,6 +85,7 @@ def check_key_in_redis(file_name):
     # if half of file alradey in redis, sends both to HAProxy
     if redis_connection.exists(split_name[0]):
         append_to_list(file_name, split_name)
+        return file_name, split_name
     # define first half file as Key in redis and the full path as value
     else:
         redis_connection.set(split_name[0], f'/ftphome/tranfer_files/{file_name}', ex=60)
