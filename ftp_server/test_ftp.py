@@ -11,9 +11,9 @@ class TestRoesifier(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        with open('/ftphome/tranfer_files/example_a.txt', "w") as file1:
-            os.system('sudo chmod +x /ftphome/tranfer_files/example_a.txt')
-            file1.write("this is")
+        file_contents = "this is"
+        file_path = "/ftphome/transfer_files/example_a.txt"
+        os.system(f"echo {file_contents} | sudo tee {file_path}")
         with open('/ftphome/tranfer_files/example_b.txt', "w") as file2:
             os.system('sudo chmod +x /ftphome/tranfer_files/example_b.txt')
             file2.write("a test")
