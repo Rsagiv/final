@@ -4,7 +4,7 @@ import redis
 import requests
 import logging
 import json
-
+#
 
 def check_json_connection(json_file_path):
     try:
