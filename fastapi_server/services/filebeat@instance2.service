@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/share/filebeat/bin/filebeat -c /etc/filebeat/filebeat1.yml
+ExecStart=/usr/share/filebeat/bin/filebeat -c /etc/filebeat/filebeatError.yml
 Restart=on-failure
 
 [Install]

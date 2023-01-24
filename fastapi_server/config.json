@@ -1,0 +1,5 @@
+{
+    "LoggerName": "elastic",
+    "LogFile": "/home/roeihafifot/logs.txt",
+    "LogFormatter": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+}

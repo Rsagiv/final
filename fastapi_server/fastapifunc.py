@@ -1,0 +1,82 @@
+import uvicorn
+import ast
+import hashlib
+import logging
+import json
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from fastapi import FastAPI, File, UploadFile, Query
+from typing import List
+from fastapi.responses import FileResponse
+
+app = FastAPI()
+# open config file
+with open("/home/roeihafifot/config.json") as jsonfile:
+    configfile = json.load(jsonfile)
+
+def create_logger(log_name, log_format, file_location):
+    logger = logging.getLogger(log_name)
+    logger.setLevel(logging.DEBUG)
+    # create a new handler
+    create_handler = logging.StreamHandler()
+    create_handler.setLevel(logging.DEBUG)
+    # create the format
+    formatter = logging.Formatter(log_format)
+    create_handler.setFormatter(formatter)
+    # add the handler to the logger
+    logger.addHandler(create_handler)
+    # add a file handler
+    handler = logging.FileHandler(file_location)
+    logger.addHandler(handler)
+    return logger
+
+
+# create a new handler and connect the logger to logs.txt file
+logger = create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
+
+
+
+def encrypt(first_half, second_half):
+    full_file = first_half + second_half
+    # enctypt the data of the file with sha512 and a random iv
+    hash = hashlib.sha512()
+    hash.update(full_file)
+    hash_file = hash.hexdigest()
+    iv = get_random_bytes(16)
+    cipher = AES.new('This is a key123'.encode("utf8"), AES.MODE_CFB, iv)
+    ciphertext = cipher.encrypt(hash_file.encode("utf8"))
+    end_file = iv + ciphertext
+    # adds the iv and the encrypted hash to the ens of the file
+    full_file_hash = full_file + end_file
+    return full_file_hash, end_file
+
+
+@app.post("/")
+def upload(files: List[UploadFile] = File(...)):
+    # create's variable for each half of the file that is sent
+    for upload_file in files:
+        logger.info(f'success upload - uploaded file to FastApi server: {upload_file.filename}')
+        split_name = (upload_file.filename).split("_")
+        try:
+            if "a" == split_name[1].split(".")[0]:
+                contents_first_half = upload_file.file.read()
+            else:
+                contents_second_half = upload_file.file.read()
+        except Exception:
+            logger.info(f'error upload - There was an error uploading: {upload_file.filename}')
+            return {"message": "There was an error uploading the file(s)"}
+        finally:
+            upload_file.file.close()
+    # create variable that containes the full leangth of the file
+    full_file_hash = encrypt(contents_first_half, contents_second_half)[0]
+    # writes the content of the file with the signeture to a local file
+    try:
+        with open(f'/home/roeihafifot/uploaded_photos/{split_name[0]}.jpg', 'wb') as f:
+            f.write(full_file_hash)
+        logger.info(f'success merge - merged files and created file: {split_name[0]}')
+    except Exception:
+        logger.info(f'error merge - There was an error merging and creating file: {split_name[0]}')
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8080)
