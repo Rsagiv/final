@@ -53,7 +53,7 @@ class TestRoesifier(unittest.TestCase):
         redis_check = roesifier.check_redis_connection(redis_connection)
         self.assertTrue(redis_check)
 
-    def test_check_files_append(self):
+    def test_redis_func(self):
         redis_connection = self.setUpClass()
         redis_connection.flushall()
         warnings.filterwarnings("ignore", category=ResourceWarning)
@@ -64,11 +64,15 @@ class TestRoesifier(unittest.TestCase):
         self.assertIsNone(first_check)
         self.assertEqual(second_check, ('example_b.txt', ['example', 'b.txt']))
 
-    # def test_append_to_list(self):
-    #     self.test_check_files_append()
-    #     check = roesifier.append_to_list("example_b.txt", ['example', 'b.txt'])
-    #     print(f'this is check: {check}')
-    #     self.assertEqual(check, [('files', <_io.BufferedReader name='/ftphome/tranfer_files/example_b.txt'>), ('files', <_io.BufferedReader name='/ftphome/tranfer_files/example_a.txt'>)])
+    def test_append_to_list(self):
+        self.test_redis_func()
+        configfile = import_config_file()
+        check = roesifier.append_to_list("example_b.txt", ['example', 'b.txt'])
+        files_test_list = []
+        files_test_list.append(('files', open(configfile["test_file2_path"], "rb")))
+        files_test_list.append(('files', open(configfile["test_file1_path"], "rb")))
+        self.assertEqual(str(check), str(files_test_list))
+
 
 if __name__ == '__main__':
     unittest.main()
