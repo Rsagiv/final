@@ -39,3 +39,5 @@ jobs:
          pwd
          cd ftp_server
          sudo python3 -m unittest test_ftp.py
+         cd _work/final
+         sudo rm -rf *
