@@ -45,6 +45,7 @@ jobs:
          cd fastapi_server
          pwd
          python3 -m pip install pycryptodome
+         pip install fastapi
          python3 test_fastapi.py
          sudo rm -rf __pycache__
          
