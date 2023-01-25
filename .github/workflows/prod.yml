@@ -21,6 +21,9 @@ jobs:
           port: 22
           script: |
             pwd
+            git clone https://github.com/Rsagiv/final.git
+            git pull origin main
+            echo hello
             
             
             
