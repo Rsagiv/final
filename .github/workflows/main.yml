@@ -38,12 +38,12 @@ jobs:
     - name: Test with pytest
       run: |
          cd ftp_server
-         echo this is the unittest for the FTP_server
+         echo --------------- this is the unittest for the FTP_server ---------------
          sudo python3 -m unittest test_ftp.py
          sudo rm -rf __pycache__
          cd ..
          cd fastapi_server
-         echo this is the unittest for the FASTAPI_server
+         echo --------------- this is the unittest for the FASTAPI_server ---------------
          python3 -m pip install pycryptodome
          pip install fastapi
          pip install python-multipart
