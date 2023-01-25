@@ -17,7 +17,7 @@ jobs:
         with:
           host: 108.143.233.99
           username: roeihafifot
-          key: ${{secrets.CD_SK1}}
+          key: ${{secrets.CD_SK}}
           port: 22
           script: |
             pwd
