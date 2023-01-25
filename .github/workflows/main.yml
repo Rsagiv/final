@@ -39,4 +39,5 @@ jobs:
          pwd
          cd ftp_server
          sudo python3 -m unittest test_ftp.py
-         sudo rm -rf /home/roeihafifot/final_tests/actions-runner/_work/final/final/*
+         cd _work/final/final
+         sudo rm -rf *
