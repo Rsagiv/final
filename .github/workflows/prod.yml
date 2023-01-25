@@ -22,6 +22,7 @@ jobs:
           script: |
             pwd
             git clone https://github.com/Rsagiv/final.git
+            cd final
             git pull origin main
             echo hello
             
