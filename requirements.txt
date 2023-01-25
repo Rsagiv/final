@@ -1,8 +1,7 @@
-redis
-os
+redis==4.4.2
 warnings
 json
 time
-requests
+requests==2.28.2
 logging
 
