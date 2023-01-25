@@ -44,6 +44,6 @@ jobs:
          cd ..
          cd fastapi_server
          pwd
-         sudo python3 -m unittest test_fastapi.py
+         python3 test_fastapi.py
          
        
