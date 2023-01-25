@@ -38,4 +38,4 @@ jobs:
       run: |
          pwd
          cd ftp_server
-         sudo python -m unittest test_ftp.py
+         sudo python3 -m unittest test_ftp.py
