@@ -46,6 +46,7 @@ jobs:
          pwd
          python3 -m pip install pycryptodome
          pip install fastapi
+         pip install python-multipart
          python3 test_fastapi.py
          sudo rm -rf __pycache__
          
