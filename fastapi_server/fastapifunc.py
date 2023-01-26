@@ -1,5 +1,4 @@
 import uvicorn
-import ast
 import hashlib
 import logging
 import json
@@ -7,7 +6,6 @@ from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from fastapi import FastAPI, File, UploadFile, Query
 from typing import List
-from fastapi.responses import FileResponse
 
 
 app = FastAPI()
@@ -54,7 +52,7 @@ def encrypt(first_half, second_half):
 
 @app.post("/")
 def upload(files: List[UploadFile] = File(...)):
-    # create's variable for each half of the file that is sent
+    # creates variable for each half of the file that is sent
     for upload_file in files:
         logger.info(f'success upload - uploaded file to FastApi server: {upload_file.filename}')
         split_name = (upload_file.filename).split("_")
