@@ -26,5 +26,7 @@ jobs:
             cd haproxy_server/
             cd conf_files/
             sudo cp haproxy.cfg /etc/haproxy/
+            sudo systemctl restart haproxy.service
+
             
             
