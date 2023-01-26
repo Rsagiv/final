@@ -1,7 +1,5 @@
 import uvicorn
 import hashlib
-import logging
-import json
 import final.utils.mainutils as utils
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
