@@ -5,8 +5,7 @@ import logging
 import json
 
 
-def import_config_file():
-    json_file_path = "/home/roeihafifot/config.json"
+def import_config_file(json_file_path):
     try:
         with open(json_file_path) as jsonfile:
             configfile = json.load(jsonfile)
@@ -15,7 +14,7 @@ def import_config_file():
         logger.info("cannot open config file: ", Exception)
 
 
-configfile = import_config_file()
+configfile = import_config_file("/home/roeihafifot/config.json")
 
 
 def create_logger(log_name, log_format, file_location):
