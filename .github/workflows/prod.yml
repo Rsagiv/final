@@ -26,7 +26,6 @@ jobs:
             pip install pycryptodome
             pip install fastapi
             pip install python-multipart
-            #git clone https://github.com/Rsagiv/final.git
             cd final
             git pull origin main
             cd fastapi_server
@@ -35,6 +34,6 @@ jobs:
             sudo cp fastapi.service /etc/systemd/system
             sudo systemctl enable fastapi.service
             sudo systemctl daemon-reload
-            sudo systemctl run fastapi.service
+            sudo systemctl start fastapi.service
             
             
