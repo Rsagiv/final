@@ -36,14 +36,15 @@ jobs:
         #flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-         cd Tests
-         pwd
-         echo --------------- this is the unittest for the FTP_server ---------------
-         sudo python3 -m unittest test_ftp.py
-         echo --------------- this is the unittest for the FASTAPI_server ---------------
          python3 -m pip install pycryptodome
          pip install fastapi
          pip install python-multipart
+         cd Tests
+         cp test_ftp.py test_fastapi.py /home/roeihafifot/final_tests/actions-runner/_work/final
+         cd /home/roeihafifot/final_tests/actions-runner/_work/final
+         echo --------------- this is the unittest for the FTP_server ---------------
+         sudo python3 -m unittest test_ftp.py
+         echo --------------- this is the unittest for the FASTAPI_server ---------------
          python3 test_fastapi.py
          sudo rm -rf __pycache__
          
