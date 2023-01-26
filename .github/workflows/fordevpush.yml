@@ -1,0 +1,31 @@
+name: CD-fastAPI
+on:
+  push:
+    branches: [ dev" ]
+
+  workflow_dispatch:
+
+jobs:
+  CD:
+    name: Continuous Delivery
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH into dev server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 20.13.30.168
+          username: roeihafifot
+          key: ${{secrets.CD_SK}}
+          port: 22
+          script: |
+            cd final
+            git checkout dev
+            git pull origin dev
+            cd ftp_server/
+            cp roesifier.py test_ftp.py watchdog_classes.py /home/roeihafifot/
+            cd
+            touch worked.txt
+            
+            
+            
+            
