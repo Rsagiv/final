@@ -1,0 +1,30 @@
+name: CD-prodHAproxy
+on:
+  workflow_run:
+    workflows: [ "CD-fastAPI" ]
+    types:
+      - completed
+
+  workflow_dispatch:
+
+jobs:
+  CD:
+    name: Continuous Delivery
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH into production server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 20.224.50.228
+          username: roeihafifot
+          key: ${{secrets.CD_SK}}
+          port: 22
+          script: |
+            cd final
+            git checkout main
+            git pull origin main
+            cd haproxy_server/
+            cd conf_files/
+            sudo cp haproxy.cfg /etc/haproxy/
+            
+            
