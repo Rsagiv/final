@@ -1,5 +1,4 @@
 import uvicorn
-import ast
 import hashlib
 import logging
 import json
@@ -7,13 +6,13 @@ from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from fastapi import FastAPI, File, UploadFile, Query
 from typing import List
-from fastapi.responses import FileResponse
-
 
 app = FastAPI()
+
 # open config file
 with open("/home/roeihafifot/config.json") as jsonfile:
     configfile = json.load(jsonfile)
+
 
 def create_logger(log_name, log_format, file_location):
     logger = logging.getLogger(log_name)
@@ -34,7 +33,6 @@ def create_logger(log_name, log_format, file_location):
 
 # create a new handler and connect the logger to logs.txt file
 logger = create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
-
 
 
 def encrypt(first_half, second_half):

@@ -1,0 +1,29 @@
+name: CD-devFastAPI
+on:
+  push:
+    branches: [ "dev" ]
+
+  workflow_dispatch:
+
+jobs:
+  CD:
+    name: Continuous Delivery
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH into dev server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 4.231.42.190
+          username: roeihafifot
+          key: ${{secrets.CD_SK}}
+          port: 22
+          script: |
+            cd final
+            git checkout dev
+            git pull origin dev
+            cd fastapi_server/
+            cp fastapifunc.py /home/roeihafifot/
+            
+            
+            
+            
