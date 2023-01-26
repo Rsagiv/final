@@ -23,8 +23,6 @@ jobs:
             git pull origin dev
             cd ftp_server/
             cp roesifier.py test_ftp.py watchdog_classes.py /home/roeihafifot/
-            cd
-            touch worked.txt
             
             
             
