@@ -3,7 +3,6 @@ import unittest
 import redis
 import os
 import warnings
-import json
 import final.utils.mainutils as utils
 
 
@@ -15,7 +14,6 @@ class TestRoesifier(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         configfile = utils.import_config_file("/home/roeihafifot/config.json")
-        logger = utils.create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
         redis_connection = redis.StrictRedis(host='localhost', port=6379)
         test_file1_contents = b"this is"
         file2_contents = b"a test"
@@ -44,7 +42,7 @@ class TestRoesifier(unittest.TestCase):
 
     def test_append_to_list(self):
         self.test_redis_func()
-        configfile = import_config_file()
+        configfile = utils.import_config_file("/home/roeihafifot/config.json")
         check = roesifier.append_to_list("example_b.txt", ['example', 'b.txt'])
         files_test_list = []
         files_test_list.append(('files', open(configfile["test_file2_path"], "rb")))
