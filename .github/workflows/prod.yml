@@ -1,4 +1,4 @@
-name: CD
+name: CD-fastAPI
 on:
   workflow_run:
     workflows: [ "CI" ]
@@ -24,7 +24,9 @@ jobs:
             git clone https://github.com/Rsagiv/final.git
             cd final
             git pull origin main
-            echo hello
+            cd fastapi_server
+            cp config.json fastapifunc.py http_ca.crt logs.txt uploaded_photos /home/roeihafifot
+            
             
             
             
