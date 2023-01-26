@@ -22,12 +22,10 @@ jobs:
           script: |
             sudo apt install python3-pip
             if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-            pip install uvicorn
-            # pip install pycryptodome
-            # pip install fastapi
-            # pip install python-multipart
-            # y
-            pwd
+            #pip install uvicorn
+            pip install pycryptodome
+            pip install fastapi
+            pip install python-multipart
             git clone https://github.com/Rsagiv/final.git
             cd final
             git pull origin main
