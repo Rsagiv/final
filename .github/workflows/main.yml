@@ -25,7 +25,6 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: |
-        pwd
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -37,17 +36,20 @@ jobs:
         #flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-         cd ftp_server
-         echo --------------- this is the unittest for the FTP_server ---------------
-         sudo python3 -m unittest test_ftp.py
-         sudo rm -rf __pycache__
-         cd ..
-         cd fastapi_server
-         echo --------------- this is the unittest for the FASTAPI_server ---------------
          python3 -m pip install pycryptodome
          pip install fastapi
          pip install python-multipart
+         cd Tests
+         cp test_ftp.py test_fastapi.py /home/roeihafifot/final_tests/actions-runner/_work/final
+         cd /home/roeihafifot/final_tests/actions-runner/_work/final
+         echo --------------- this is the unittest for the FTP_server ---------------
+         sudo python3 -m unittest test_ftp.py
+         echo --------------- this is the unittest for the FASTAPI_server ---------------
          python3 test_fastapi.py
+         cd final/ftp_server
+         sudo rm -rf __pycache__
+         cd ..
+         cd utils 
          sudo rm -rf __pycache__
          
        

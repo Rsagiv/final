@@ -1,32 +1,9 @@
-import roesifier
+import final.ftp_server.roesifier as roesifier
 import unittest
 import redis
 import os
 import warnings
-import json
-
-
-def check_json_connection(json_file_path):
-    try:
-        with open(json_file_path) as jsonfile:
-            json.load(jsonfile)
-        return True
-    except json.decoder.JSONDecodeError:
-        return False
-    except FileNotFoundError:
-        return "no_file"
-
-
-def import_config_file():
-    json_file_path = "/home/roeihafifot/config.json"
-    if check_json_connection(json_file_path):
-        with open("/home/roeihafifot/config.json") as jsonfile:
-            configfile = json.load(jsonfile)
-            return configfile
-    elif check_json_connection(json_file_path) == "no_file":
-        logger.info("ERROR In finding config file")
-    else:
-        logger.info("ERROR Connection to JSON file failed")
+import final.utils.mainutils as utils
 
 
 class TestRoesifier(unittest.TestCase):
@@ -36,7 +13,7 @@ class TestRoesifier(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        configfile = import_config_file()
+        configfile = utils.import_config_file("/home/roeihafifot/config.json")
         redis_connection = redis.StrictRedis(host='localhost', port=6379)
         test_file1_contents = b"this is"
         file2_contents = b"a test"
@@ -49,8 +26,7 @@ class TestRoesifier(unittest.TestCase):
         return redis_connection
 
     def test_redis_connection(self):
-        redis_connection = self.setUpClass()
-        redis_check = roesifier.check_redis_connection(redis_connection)
+        redis_check = roesifier.redis_function().ping()
         self.assertTrue(redis_check)
 
     def test_redis_func(self):
@@ -66,7 +42,7 @@ class TestRoesifier(unittest.TestCase):
 
     def test_append_to_list(self):
         self.test_redis_func()
-        configfile = import_config_file()
+        configfile = utils.import_config_file("/home/roeihafifot/config.json")
         check = roesifier.append_to_list("example_b.txt", ['example', 'b.txt'])
         files_test_list = []
         files_test_list.append(('files', open(configfile["test_file2_path"], "rb")))

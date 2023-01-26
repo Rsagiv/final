@@ -1,4 +1,4 @@
-import fastapifunc
+import final.fastapi_server.fastapifunc as fastapifunc
 import unittest
 
 

@@ -30,7 +30,7 @@ jobs:
             cd final
             git pull origin main
             cd fastapi_server
-            cp -r config.json fastapifunc.py http_ca.crt logs.txt uploaded_photos /home/roeihafifot
+            cp -r fastapifunc.py http_ca.crt logs.txt uploaded_photos /home/roeihafifot
             
             
             

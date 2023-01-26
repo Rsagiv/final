@@ -1,40 +1,17 @@
 import uvicorn
-import ast
 import hashlib
-import logging
-import json
+import final.utils.mainutils as utils
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from fastapi import FastAPI, File, UploadFile, Query
 from typing import List
-from fastapi.responses import FileResponse
-
 
 app = FastAPI()
-# open config file
-with open("/home/roeihafifot/config.json") as jsonfile:
-    configfile = json.load(jsonfile)
 
-def create_logger(log_name, log_format, file_location):
-    logger = logging.getLogger(log_name)
-    logger.setLevel(logging.DEBUG)
-    # create a new handler
-    create_handler = logging.StreamHandler()
-    create_handler.setLevel(logging.DEBUG)
-    # create the format
-    formatter = logging.Formatter(log_format)
-    create_handler.setFormatter(formatter)
-    # add the handler to the logger
-    logger.addHandler(create_handler)
-    # add a file handler
-    handler = logging.FileHandler(file_location)
-    logger.addHandler(handler)
-    return logger
-
+configfile = utils.import_config_file("/home/roeihafifot/config.json")
 
 # create a new handler and connect the logger to logs.txt file
-logger = create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
-
+logger = utils.create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
 
 
 def encrypt(first_half, second_half):

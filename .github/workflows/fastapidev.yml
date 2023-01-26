@@ -1,4 +1,4 @@
-name: CD-devFTP
+name: CD-devFastAPI
 on:
   push:
     branches: [ "dev" ]
@@ -13,7 +13,7 @@ jobs:
       - name: SSH into dev server
         uses: appleboy/ssh-action@master
         with:
-          host: 20.13.30.168
+          host: 4.231.42.190
           username: roeihafifot
           key: ${{secrets.CD_SK}}
           port: 22
@@ -21,8 +21,8 @@ jobs:
             cd final
             git checkout dev
             git pull origin dev
-            cd ftp_server/
-            cp roesifier.py watchdog_classes.py /home/roeihafifot/
+            cd fastapi_server/
+            cp fastapifunc.py /home/roeihafifot/
             
             
             

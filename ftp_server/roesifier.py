@@ -1,63 +1,22 @@
 # import modul's: time, Observer, FileSystemEventHandler,logging, redis, requestsa
 import redis
 import requests
-import logging
-import json
+import final.utils.mainutils as utils
 
-
-def import_config_file():
-    json_file_path = "/home/roeihafifot/config.json"
-    try:
-        with open(json_file_path) as jsonfile:
-            configfile = json.load(jsonfile)
-            return configfile
-    except Exception:
-        logger.info("cannot open config file: ", Exception)
-
-
-configfile = import_config_file()
-
-
-def create_logger(log_name, log_format, file_location):
-    logger = logging.getLogger(log_name)
-    logger.setLevel(logging.DEBUG)
-    # create a new handler
-    create_handler = logging.StreamHandler()
-    create_handler.setLevel(logging.DEBUG)
-    # create the format
-    formatter = logging.Formatter(log_format)
-    create_handler.setFormatter(formatter)
-    # add the handler to the logger
-    logger.addHandler(create_handler)
-    # add a file handler
-    handler = logging.FileHandler(file_location)
-    logger.addHandler(handler)
-    return logger
-
+configfile = utils.import_config_file("/home/roeihafifot/config.json")
 
 # create a new handler and connect the logger to logs.txt file
-logger = create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
-
-
-def check_redis_connection(redis_connection):
-    try:
-        # Send a ping command to the Redis server
-        response = redis_connection.ping()
-        # If the server responds with a PONG message, return True
-        if response:
-            return True
-    except redis.ConnectionError:
-        # If an error occurs while trying to connect to the server, return False
-        return False
+logger = utils.create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
 
 
 def redis_function():
     redis_connection = redis.StrictRedis(host='localhost', port=6379)
-    if check_redis_connection(redis_connection):
-        logger.info("SUCCESS_connection_to_redis: we've got a pong from redis!")
-        return redis_connection
-    else:
-        logger.info("ERROR_connection_to_redis: we do not have a pong from redis!")
+    try:
+        if redis_connection.ping():
+            logger.info("SUCCESS_connection_to_redis: we've got a pong from redis!")
+            return redis_connection
+    except Exception:
+        logger.info("cannot connect to redis: ", Exception)
 
 
 redis_connection = redis_function()
