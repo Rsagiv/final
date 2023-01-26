@@ -1,41 +1,12 @@
 # import modul's: time, Observer, FileSystemEventHandler,logging, redis, requestsa
 import redis
 import requests
-import logging
-import json
+import final.utils.mainutils as utils
 
-
-def import_config_file(json_file_path):
-    try:
-        with open(json_file_path) as jsonfile:
-            configfile = json.load(jsonfile)
-            return configfile
-    except Exception:
-        logger.info("cannot open config file: ", Exception)
-
-
-configfile = import_config_file("/home/roeihafifot/config.json")
-
-
-def create_logger(log_name, log_format, file_location):
-    logger = logging.getLogger(log_name)
-    logger.setLevel(logging.DEBUG)
-    # create a new handler
-    create_handler = logging.StreamHandler()
-    create_handler.setLevel(logging.DEBUG)
-    # create the format
-    formatter = logging.Formatter(log_format)
-    create_handler.setFormatter(formatter)
-    # add the handler to the logger
-    logger.addHandler(create_handler)
-    # add a file handler
-    handler = logging.FileHandler(file_location)
-    logger.addHandler(handler)
-    return logger
-
+configfile = utils.import_config_file("/home/roeihafifot/config.json")
 
 # create a new handler and connect the logger to logs.txt file
-logger = create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
+logger = utils.create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
 
 
 def redis_function():
