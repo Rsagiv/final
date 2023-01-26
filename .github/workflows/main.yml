@@ -37,7 +37,7 @@ jobs:
         #flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-         cd tests
+         cd Tests
          echo --------------- this is the unittest for the FTP_server ---------------
          sudo python3 -m unittest test_ftp.py
          sudo rm -rf __pycache__
