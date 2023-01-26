@@ -22,7 +22,7 @@ jobs:
             git checkout dev
             git pull origin dev
             cd ftp_server/
-            cp roesifier.py test_ftp.py watchdog_classes.py /home/roeihafifot/
+            cp roesifier.py watchdog_classes.py /home/roeihafifot/
             
             
             
