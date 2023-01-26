@@ -32,7 +32,6 @@ jobs:
             cd fastapi_server
             cp -r fastapifunc.py http_ca.crt logs.txt uploaded_photos /home/roeihafifot
             cd services/
-            python3 fastapifunc.py 
             sudo cp fastapi.service /etc/systemd/system
             sudo systemctl enable fastapi.service
             sudo systemctl daemon-reload
