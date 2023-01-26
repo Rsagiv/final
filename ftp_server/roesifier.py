@@ -3,7 +3,7 @@ import redis
 import requests
 import logging
 import json
-
+#did it work roei?
 
 def import_config_file():
     json_file_path = "/home/roeihafifot/config.json"
