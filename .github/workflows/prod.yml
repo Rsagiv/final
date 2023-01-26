@@ -25,6 +25,7 @@ jobs:
             pip install pycryptodome
             pip install fastapi
             pip install python-multipart
+            #git clone https://github.com/Rsagiv/final.git
             cd final
             git pull origin main
             cd fastapi_server
