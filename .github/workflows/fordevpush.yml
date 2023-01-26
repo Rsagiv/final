@@ -1,7 +1,7 @@
 name: CD-devFTP
 on:
   push:
-    branches: [ dev" ]
+    branches: [ "dev" ]
 
   workflow_dispatch:
 
