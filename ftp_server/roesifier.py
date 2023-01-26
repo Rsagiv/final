@@ -1,32 +1,18 @@
 # import modul's: time, Observer, FileSystemEventHandler,logging, redis, requestsa
-import time
 import redis
 import requests
 import logging
 import json
 
 
-def check_json_connection(json_file_path):
-    try:
-        with open(json_file_path) as jsonfile:
-            json.load(jsonfile)
-        return True
-    except json.decoder.JSONDecodeError:
-        return False
-    except FileNotFoundError:
-        return "no_file"
-
-
 def import_config_file():
     json_file_path = "/home/roeihafifot/config.json"
-    if check_json_connection(json_file_path):
-        with open("/home/roeihafifot/config.json") as jsonfile:
+    try:
+        with open(json_file_path) as jsonfile:
             configfile = json.load(jsonfile)
             return configfile
-    elif check_json_connection(json_file_path) == "no_file":
-        logger.info("ERROR In finding config file")
-    else:
-        logger.info("ERROR Connection to JSON file failed")
+    except Exception:
+        logger.info("cannot open config file: ", Exception)
 
 
 configfile = import_config_file()
@@ -65,7 +51,6 @@ def check_redis_connection(redis_connection):
         return False
 
 
-# define redis on local host, on port 6379
 def redis_function():
     redis_connection = redis.StrictRedis(host='localhost', port=6379)
     if check_redis_connection(redis_connection):
@@ -110,4 +95,3 @@ def send_to_fastAPI(files):
             logger.info("ERROR: Failed to establish connection")
     except Exception as error:
         logger.info(f"ERROR: Failed to establish connection: because {error}")
-
