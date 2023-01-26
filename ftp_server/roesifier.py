@@ -39,25 +39,14 @@ def create_logger(log_name, log_format, file_location):
 logger = create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
 
 
-def check_redis_connection(redis_connection):
-    try:
-        # Send a ping command to the Redis server
-        response = redis_connection.ping()
-        # If the server responds with a PONG message, return True
-        if response:
-            return True
-    except redis.ConnectionError:
-        # If an error occurs while trying to connect to the server, return False
-        return False
-
-
 def redis_function():
     redis_connection = redis.StrictRedis(host='localhost', port=6379)
-    if check_redis_connection(redis_connection):
-        logger.info("SUCCESS_connection_to_redis: we've got a pong from redis!")
-        return redis_connection
-    else:
-        logger.info("ERROR_connection_to_redis: we do not have a pong from redis!")
+    try:
+        if redis_connection.ping():
+            logger.info("SUCCESS_connection_to_redis: we've got a pong from redis!")
+            return redis_connection
+    except Exception:
+        logger.info("cannot connect to redis: ", Exception)
 
 
 redis_connection = redis_function()
