@@ -20,6 +20,12 @@ jobs:
           key: ${{secrets.CD_SK}}
           port: 22
           script: |
+            sudo apt install python3-pip
+            pip install uvicorn
+            pip install pycryptodome
+            pip install fastapi
+            pip install python-multipart
+            # y
             pwd
             git clone https://github.com/Rsagiv/final.git
             cd final
