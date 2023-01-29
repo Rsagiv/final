@@ -48,6 +48,8 @@ jobs:
          cd ..
          cd utils 
          sudo rm -rf __pycache__
-         
+         cd ..
+         cd ..
+         sudo rm -rf __pycache__
          
        
