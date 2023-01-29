@@ -8,7 +8,7 @@ def import_config_file(json_file_path):
             configfile = json.load(jsonfile)
             return configfile
     except Exception:
-        logger.info("cannot open config file: ", Exception)
+        raise ("cannot open config file: ", Exception)
 
 
 def create_logger(log_name, log_format, file_location):
