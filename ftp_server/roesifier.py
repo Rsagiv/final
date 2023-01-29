@@ -37,6 +37,7 @@ def process_new_file(file_name, watch_directory):
 def append_to_list(file_name, split_name, watch_directory):
     first_half = f'{watch_directory}/{file_name}'
     second_half = (redis_connection.get(split_name[0])).decode()
+    print(second_half)
     files = [
         ('files', open(first_half, 'rb')),
         ('files', open(second_half, 'rb'))
