@@ -19,7 +19,7 @@ class OnMyWatch:
         for file in dir_list:
             process_new_file(file, self.watch_directory)
 
-        Handler.__class__.watch_directory = self.watch_directory
+        Handler.__init__.watch_directory = self.watch_directory
         event_handler = Handler()
         self.observer.schedule(event_handler, self.watch_directory, recursive=True)
         self.observer.start()
