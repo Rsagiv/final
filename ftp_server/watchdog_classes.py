@@ -19,7 +19,7 @@ class OnMyWatch:
         for file in dir_list:
             process_new_file(file, self.watch_directory)
 
-        Handler.__init__.watch_directory = self.watch_directory
+        #Handler.__class__.watch_directory = self.watch_directory
         event_handler = Handler()
         self.observer.schedule(event_handler, self.watch_directory, recursive=True)
         self.observer.start()
@@ -34,16 +34,15 @@ class OnMyWatch:
 
 class Handler(FileSystemEventHandler):
 
-    watch_directory = None
-
     @staticmethod
     # action's when Event(FIle) is closed:
     def on_closed(event, **kwargs):
+        Handler()
         if event.is_directory:
             return None
         # create variable with the name of the file
-        file_name = event.src_path.replace(Handler.__class__.watch_directory, '')
-        process_new_file(file_name, Handler.__class__.watch_directory)
+        file_name = event.src_path.replace("/ftphome/tranfer_files", '')
+        process_new_file(file_name, "/ftphome/tranfer_files")
 
 
 if __name__ == '__main__':
