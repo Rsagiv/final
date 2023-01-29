@@ -35,5 +35,13 @@ jobs:
             sudo systemctl enable fastapi.service
             sudo systemctl daemon-reload
             sudo systemctl start fastapi.service
-            
-            
+            # download filebit
+            curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.6.1-amd64.deb
+            sudo dpkg -i filebeat-8.6.1-amd64.deb
+            cd /home/roeihafifot/final/fastapi_server/conf_files
+            sudo cp filebeat.yml filebeatError.yml /etc/filebeat/
+            sudo systemctl start filebeat.service
+            cd ..
+            cd services
+            sudo cp filebeat@instance2.service /etc/systemd/system
+            sudo systemctl start filebeat@instance2.service
