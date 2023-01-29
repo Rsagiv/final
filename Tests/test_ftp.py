@@ -43,7 +43,7 @@ class TestRoesifier(unittest.TestCase):
     def test_append_to_list(self):
         self.test_redis_func()
         configfile = utils.import_config_file("/home/roeihafifot/config.json")
-        check = roesifier.append_to_list("example_b.txt", ['example', 'b.txt'])
+        check = roesifier.append_to_list("example_b.txt", ['example', 'b.txt'], '/ftphome/tranfer_files')
         files_test_list = []
         files_test_list.append(('files', open(configfile["test_file2_path"], "rb")))
         files_test_list.append(('files', open(configfile["test_file1_path"], "rb")))
