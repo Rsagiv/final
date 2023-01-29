@@ -11,7 +11,7 @@ class OnMyWatch:
         self.observer = Observer()
         # Set the directory on watch
         self.watch_directory = "/ftphome/tranfer_files"
-        self.handler = Handler(self.watch_directory)
+        Handler.watch_directory = self.watch_directory
 
     def run(self):
         # define FTP path to scan all files before watchdog client
@@ -21,7 +21,7 @@ class OnMyWatch:
             process_new_file(file, self.watch_directory)
 
         #Handler.__class__.watch_directory = self.watch_directory
-        event_handler = Handler(self.watch_directory)
+        event_handler = Handler()
         self.observer.schedule(event_handler, self.watch_directory, recursive=True)
         self.observer.start()
         try:
@@ -34,12 +34,11 @@ class OnMyWatch:
 
 
 class Handler(FileSystemEventHandler):
-    watch_directory = None
-    def __init__(self, watch_directory):
-        self.watch_directory = watch_directory
+    watch_directory = ""
     @staticmethod
     # action's when Event(FIle) is closed:
     def on_closed(event, **kwargs):
+        Handler()
         if event.is_directory:
             return None
         # create variable with the name of the file
