@@ -8,7 +8,7 @@ from typing import List
 
 app = FastAPI()
 
-configfile = utils.import_config_file("/home/roeihafifot/config.json")
+configfile = utils.import_config_file("./config.json")
 
 # create a new handler and connect the logger to logs.txt file
 logger = utils.create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
@@ -16,44 +16,61 @@ logger = utils.create_logger(configfile["LoggerName"], configfile["LogFormatter"
 
 def encrypt(first_half, second_half):
     full_file = first_half + second_half
-    # enctypt the data of the file with sha512 and a random iv
-    hash = hashlib.sha512()
-    hash.update(full_file)
-    hash_file = hash.hexdigest()
+
+    # create hash of the two file names combined
+    file_names_hash = hashlib.sha512()
+    file_names_hash.update(full_file)
+    hash_file = file_names_hash.hexdigest()
+
+    # encrypt the resulting hash with sha512 and a random iv
     iv = get_random_bytes(16)
     cipher = AES.new('This is a key123'.encode("utf8"), AES.MODE_CFB, iv)
     ciphertext = cipher.encrypt(hash_file.encode("utf8"))
     end_file = iv + ciphertext
-    # adds the iv and the encrypted hash to the ens of the file
+
+    # add the iv and the encrypted hash to the end of the file
     full_file_hash = full_file + end_file
     return full_file_hash, end_file
 
 
+def read_uploaded_file(uploaded_file):
+    try:
+        logger.info(f'success upload - uploaded file to FastApi server: {uploaded_file.filename}')
+        split_name = uploaded_file.filename.split("_")
+        index = 0 if ("a" == split_name[1].split(".")[0]) else 1
+        content = uploaded_file.file.read()
+        return index, content, split_name[0]
+    except Exception as e:
+        logger.error(f'error upload - There was an error uploading: {uploaded_file.filename} - {str(e)}')
+        return {"message": "There was an error uploading the file(s)"}
+    finally:
+        uploaded_file.file.close()
+
+
 @app.post("/")
 def upload(files: List[UploadFile] = File(...)):
-    # create's variable for each half of the file that is sent
-    for upload_file in files:
-        logger.info(f'success upload - uploaded file to FastApi server: {upload_file.filename}')
-        split_name = (upload_file.filename).split("_")
-        try:
-            if "a" == split_name[1].split(".")[0]:
-                contents_first_half = upload_file.file.read()
-            else:
-                contents_second_half = upload_file.file.read()
-        except Exception:
-            logger.info(f'error upload - There was an error uploading: {upload_file.filename}')
-            return {"message": "There was an error uploading the file(s)"}
-        finally:
-            upload_file.file.close()
-    # create variable that containes the full leangth of the file
-    full_file_hash = encrypt(contents_first_half, contents_second_half)[0]
-    # writes the content of the file with the signeture to a local file
+
+    if not len(files) == 2:
+        return 400
+
+    name = ''
+    content = [None, None]
+    for f in files:
+        index, file_content, name = read_uploaded_file(f)
+        content[index] = file_content
+
+    if content[0] is None or content[1] is None:
+        return 400
+
+    # create variable that of both files plus the hash
+    full_file_hash = encrypt(content[0], content[1])[0]
+    # writes the content of the file with the signature to a local file
     try:
-        with open(f'/home/roeihafifot/uploaded_photos/{split_name[0]}.jpg', 'wb') as f:
+        with open(f'/home/roeihafifot/uploaded_photos/{name}.jpg', 'wb') as f:
             f.write(full_file_hash)
-        logger.info(f'success merge - merged files and created file: {split_name[0]}')
-    except Exception:
-        logger.info(f'error merge - There was an error merging and creating file: {split_name[0]}')
+        logger.info(f'success merge - merged files and created file: {name}')
+    except Exception as e:
+        logger.error(f'error merge - There was an error merging and creating file: {name} - {e}')
 
 
 if __name__ == "__main__":
