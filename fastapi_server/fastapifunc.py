@@ -8,7 +8,7 @@ from typing import List
 
 app = FastAPI()
 
-configfile = utils.import_config_file("./config.json")
+configfile = utils.import_config_file("/home/roeihafifot/config.json")
 
 # create a new handler and connect the logger to logs.txt file
 logger = utils.create_logger(configfile["LoggerName"], configfile["LogFormatter"], configfile["LogFile"])
