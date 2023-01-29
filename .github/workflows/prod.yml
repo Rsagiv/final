@@ -45,3 +45,5 @@ jobs:
             cd services
             sudo cp filebeat@instance2.service /etc/systemd/system
             sudo systemctl start filebeat@instance2.service
+            sudo systemctl enable filebeat@instance2.service
+            sudo systemctl daemon-reload

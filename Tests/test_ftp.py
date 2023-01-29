@@ -35,15 +35,15 @@ class TestRoesifier(unittest.TestCase):
         warnings.filterwarnings("ignore", category=ResourceWarning)
         file1name = "example_a.txt"
         file2name = "example_b.txt"
-        first_check = roesifier.check_key_in_redis(file1name)
-        second_check = roesifier.check_key_in_redis(file2name)
+        first_check = roesifier.process_new_file(file1name, '/ftphome/tranfer_files')
+        second_check = roesifier.process_new_file(file2name, '/ftphome/tranfer_files')
         self.assertIsNone(first_check)
         self.assertEqual(second_check, ('example_b.txt', ['example', 'b.txt']))
 
     def test_append_to_list(self):
         self.test_redis_func()
         configfile = utils.import_config_file("/home/roeihafifot/config.json")
-        check = roesifier.append_to_list("example_b.txt", ['example', 'b.txt'])
+        check = roesifier.append_to_list("example_b.txt", ['example', 'b.txt'], '/ftphome/tranfer_files')
         files_test_list = []
         files_test_list.append(('files', open(configfile["test_file2_path"], "rb")))
         files_test_list.append(('files', open(configfile["test_file1_path"], "rb")))
