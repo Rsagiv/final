@@ -17,7 +17,7 @@ class OnMyWatch:
         dir_list = os.listdir(self.watch_directory)
         # scans all files in FTP dir and runs the main func before watchdog client
         for file in dir_list:
-            process_new_file(file)
+            process_new_file(file, self.watch_directory)
 
         Handler.__class__.watch_directory = self.watch_directory
         event_handler = Handler()
