@@ -35,8 +35,8 @@ class TestRoesifier(unittest.TestCase):
         warnings.filterwarnings("ignore", category=ResourceWarning)
         file1name = "example_a.txt"
         file2name = "example_b.txt"
-        first_check = roesifier.process_new_file(file1name, None)
-        second_check = roesifier.process_new_file(file2name, None)
+        first_check = roesifier.process_new_file(file1name, '/ftphome/tranfer_files')
+        second_check = roesifier.process_new_file(file2name, '/ftphome/tranfer_files')
         self.assertIsNone(first_check)
         self.assertEqual(second_check, ('example_b.txt', ['example', 'b.txt']))
 
